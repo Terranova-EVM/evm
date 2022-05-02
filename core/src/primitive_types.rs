@@ -1,8 +1,9 @@
 #![allow(clippy::use_self)]
 
+use cw_storage_plus::{PrimaryKey, Prefixer};
 use fixed_hash::{construct_fixed_hash, impl_fixed_hash_conversions};
 use uint::{construct_uint};
-
+use alloc::{vec, vec::Vec};
 
 construct_fixed_hash! {
 	/// Fixed-size uninterpreted hash type with 20 bytes (160 bits) size.
@@ -211,3 +212,41 @@ impl From<U256> for H160 {
 		H256::from(value).into()
 	}
 }
+
+impl<'a> PrimaryKey<'a> for &'a H160 {
+    type Prefix = ();
+    type SubPrefix = ();
+
+	fn key(&self) -> Vec<&[u8]> {
+		vec![self.as_bytes()]
+	}	
+}
+
+impl<'a> Prefixer<'a> for &'a H160 {
+	fn prefix(&self) -> Vec<&[u8]> {
+		vec![self.as_bytes()]
+	}
+}
+
+// TODO: Figure this shit out later, ask someone
+// impl<'a> PrimaryKey<'a> for &'a U256 {
+//     type Prefix = ();
+//     type SubPrefix = ();
+
+// 	fn key(&self) -> Vec<&[u8]> {
+// 		let mut bytes: [u8; 32] = [0_u8; 32];
+// 		self.to_big_endian(&mut bytes);
+		
+// 		vec![&bytes.to_owned()]
+// 	}
+// }
+
+// impl<'a> Prefixer<'a> for &'a U256 {
+// 	fn prefix(&self) -> Vec<&[u8]> {
+// 		let mut bytes: Vec<&[u8]> = vec![&[0_u8; 32]];
+		
+// 		self.to_big_endian(&mut bytes[0]);
+		
+// 		bytes
+// 	}
+// }

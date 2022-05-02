@@ -18,6 +18,8 @@ rlp = { version = "0.5", default-features = false }
 serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
 serde_bytes = { version = "0.11.5", optional = true }
 
+cw-storage-plus = "0.8.0" # MAKE SURE THIS MATCHES THE VERSION IN TERRANOVA
+
 [dev-dependencies]
 hex = "0.4"
 
