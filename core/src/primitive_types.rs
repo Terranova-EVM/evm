@@ -178,6 +178,12 @@ impl<'de> serde::Deserialize<'de> for U256 {
 
 
 impl U256 {
+	pub fn to_bytes(self) -> [u8; 32] {
+		let data: [u8; 32] = unsafe { core::mem::transmute(self) };
+
+		data
+	}
+
 	pub fn into_big_endian_fast(self, buffer: &mut [u8]) {
 		let data: [u8; 32] = unsafe { core::mem::transmute(self) };
 		
