@@ -5,12 +5,16 @@ use fixed_hash::{construct_fixed_hash, impl_fixed_hash_conversions};
 use uint::{construct_uint};
 use alloc::{vec, vec::Vec};
 
+use serde::{Serialize, Deserialize};
+
 construct_fixed_hash! {
 	/// Fixed-size uninterpreted hash type with 20 bytes (160 bits) size.
+	#[derive(Serialize, Deserialize)]
 	pub struct H160(20);
 }
 construct_fixed_hash! {
 	/// Fixed-size uninterpreted hash type with 32 bytes (256 bits) size.
+	#[derive(Serialize, Deserialize)]
 	pub struct H256(32);
 }
 
@@ -19,11 +23,13 @@ impl_fixed_hash_conversions!(H256, H160);
 
 construct_uint! {
 	/// 256-bit unsigned integer.
+	#[derive(Serialize, Deserialize)]
 	pub struct U256(4);
 }
 
 construct_uint! {
 	/// 512-bit unsigned integer.
+	#[derive(Serialize, Deserialize)]
 	pub struct U512(8);
 }
 
@@ -132,13 +138,13 @@ macro_rules! impl_fixed_hash_serde {
 	};
 }
 
-#[cfg(feature = "with-serde")]
-impl_fixed_hash_serde!(H160);
+// #[cfg(feature = "with-serde")]
+// impl_fixed_hash_serde!(H160);
 
-#[cfg(feature = "with-serde")]
-impl_fixed_hash_serde!(H256);
+// #[cfg(feature = "with-serde")]
+// impl_fixed_hash_serde!(H256);
 
-
+/*
 impl serde::Serialize for U256 {
 	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
 	where
@@ -175,7 +181,7 @@ impl<'de> serde::Deserialize<'de> for U256 {
 		deserializer.deserialize_bytes(Visitor)
 	}
 }
-
+*/
 
 impl U256 {
 	pub fn to_bytes(self) -> [u8; 32] {
