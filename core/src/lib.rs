@@ -128,7 +128,8 @@ impl Machine {
 	/// Loop stepping the machine, until it stops.
 	pub fn run<F>(&mut self, max_steps: u64, mut pre_validate: F) -> (u64, Capture<ExitReason, Trap>)
 		where F: FnMut(Opcode, &Stack) -> Result<(), ExitError>
-	{
+	{	
+		log::debug!("rust-evm/core/src/lib.rs, fn run");
 		for step in 0..max_steps {
 			let position = match self.position {
 				Ok(position) => position,
