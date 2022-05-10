@@ -184,9 +184,11 @@ impl<'de> serde::Deserialize<'de> for U256 {
 */
 
 impl U256 {
+	/// Return byte array of the U256 in big-endian format
 	pub fn to_bytes(self) -> [u8; 32] {
-		let data: [u8; 32] = unsafe { core::mem::transmute(self) };
-
+		let mut data: [u8; 32] = unsafe { core::mem::transmute(self) };
+		data.reverse();
+		
 		data
 	}
 
@@ -235,6 +237,21 @@ impl<'a> PrimaryKey<'a> for &'a H160 {
 }
 
 impl<'a> Prefixer<'a> for &'a H160 {
+	fn prefix(&self) -> Vec<&[u8]> {
+		vec![self.as_bytes()]
+	}
+}
+
+impl<'a> PrimaryKey<'a> for &'a H256 {
+    type Prefix = ();
+    type SubPrefix = ();
+
+	fn key(&self) -> Vec<&[u8]> {
+		vec![self.as_bytes()]
+	}	
+}
+
+impl<'a> Prefixer<'a> for &'a H256 {
 	fn prefix(&self) -> Vec<&[u8]> {
 		vec![self.as_bytes()]
 	}
