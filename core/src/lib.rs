@@ -149,12 +149,14 @@ impl Machine {
 				self.exit(reason);
 				return (step, Capture::Exit(reason));
 			}
-
+			log::debug!("hiiiiii");
 			match eval(self, opcode, position) {
 				Control::Continue(p) => {
+					log::debug!("continue");
 					self.position = Ok(position + p);
 				},
 				Control::Exit(reason) => {
+					log::debug!("exit, reason: {:?}", reason);
 					self.exit(reason);
 					return (step, Capture::Exit(reason))
 				},
@@ -162,6 +164,7 @@ impl Machine {
 					self.position = Ok(p);
 				},
 				Control::Trap(opcode) => {
+					log::debug!("trap,");
 					self.position = Ok(position + 1);
 					return (step, Capture::Trap(opcode));
 				},

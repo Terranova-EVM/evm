@@ -179,7 +179,7 @@ impl Runtime {
 		}
 
 		let mut steps = 0_u64;
-
+		log::debug!("max steps: {}", max_steps);
 		while steps < max_steps {
 			let (steps_executed, capture) = {
 				let context = &self.context;
@@ -197,6 +197,7 @@ impl Runtime {
 					return (steps, Capture::Exit(reason));
 				},
 				Capture::Trap(opcode) => {
+					log::debug!("trappp, opcode: {:?}", opcode);
 					match eval::eval(self, opcode, handler) {
 						eval::Control::Continue => {},
 						eval::Control::CallInterrupt(interrupt) => {
@@ -208,6 +209,7 @@ impl Runtime {
 							return (steps, Capture::Trap(Resolve::Create(interrupt, resolve)));
 						},
 						eval::Control::Exit(exit) => {
+							log::debug!("Exit, reason: {:?}", exit);
 							self.machine.exit(exit);
 							self.status = Err(exit);
 							return (steps, Capture::Exit(exit));
